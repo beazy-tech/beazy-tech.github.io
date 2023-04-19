@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Enter Phone Number</title>
+  </head>
+  <body>
+    <h1>Enter your phone number:</h1>
+    <form id="phone-number-form">
+      <input type="tel" id="phone-number" name="phone-number" placeholder="Enter your phone number" required>
+      <button type="submit">Submit</button>
+    </form>
+
+    <script>
+      const form = document.getElementById('phone-number-form');
+      const phoneNumberField = document.getElementById('phone-number');
+
+      // Request permission to access phone number
+      phoneNumberField.addEventListener('focus', async () => {
+        try {
+          const phoneNumber = await navigator.contacts.select(['phone']);
+          phoneNumberField.value = phoneNumber[0].phoneNumbers[0].value;
+        } catch (error) {
+          console.error(error);
+        }
+      });
+
+      // Submit form data
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const phoneNumber = formData.get('phone-number');
+
+        // Send data to server
+        // ...
+      });
+    </script>
+  </body>
+</html>
