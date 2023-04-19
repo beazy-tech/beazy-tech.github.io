@@ -15,14 +15,19 @@
       const phoneNumberField = document.getElementById('phone-number');
 
       // Request permission to access phone number
-      phoneNumberField.addEventListener('focus', async () => {
+      async function requestPhoneNumberPermission() {
         try {
-          const phoneNumber = await navigator.contacts.select(['phone']);
-          phoneNumberField.value = phoneNumber[0].phoneNumbers[0].value;
+          const permissionStatus = await navigator.permissions.query({ name: 'contacts' });
+          if (permissionStatus.state === 'granted') {
+            const phoneNumber = await navigator.contacts.select(['phone']);
+            phoneNumberField.value = phoneNumber[0].phoneNumbers[0].value;
+          }
         } catch (error) {
           console.error(error);
         }
-      });
+      }
+
+      phoneNumberField.addEventListener('focus', requestPhoneNumberPermission);
 
       // Submit form data
       form.addEventListener('submit', (event) => {
